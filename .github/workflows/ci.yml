@@ -10,24 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
+      - name: Check out code
         uses: actions/checkout@v4
-
-      - name: Setup Node.js
+        with:
+          fetch-depth: 2
+ 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+ 
+      - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '18.x' # Or the version specified in your package.json
-          cache: 'npm' # Set cache for npm
-
-      - name: Install Dependencies
-        run: npm install
-
-      # Use the scripts from your root package.json
-      - name: Lint All Packages
-        run: npm run lint
-
-      - name: Run All Tests
-        run: npm run test
-
-      - name: Build All Packages
-        run: npm run build
+          node-version: 20
+          cache: 'pnpm'
+ 
+      - name: Install dependencies
+        run: pnpm install
+ 
+      - name: Build
+        run: pnpm build
+ 
+      - name: Test
+        run: pnpm test
