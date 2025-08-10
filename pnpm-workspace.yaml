@@ -1,5 +1,9 @@
 packages:
   - apps/*
   - packages/*
+  - supabase
 
 nodeLinker: hoisted
+
+onlyBuiltDependencies:
+  - supabase

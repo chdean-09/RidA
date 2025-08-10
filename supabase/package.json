@@ -1,0 +1,10 @@
+{
+  "name": "@rida/supabase",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "supabase status || supabase start",
+    "reset": "supabase db reset || supabase start",
+    "stop": "supabase stop"
+  }
+}
