@@ -5,10 +5,6 @@
   "scripts": {
     "dev": "supabase status || supabase start",
     "reset": "supabase db reset || supabase start",
-    "test": "supabase db test",
-    "lint": "supabase db lint",
-    "lint:report": "supabase db lint",
-    "deploy": "supabase link --project-ref $SUPABASE_PROJECT_REF && supabase db push",
     "stop": "supabase stop"
   }
 }
