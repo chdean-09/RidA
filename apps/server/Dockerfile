@@ -9,9 +9,9 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 # Set working directory
 WORKDIR /app
-RUN yarn global add turbo
+RUN npm install -g pnpm turbo
 COPY . .
-RUN turbo prune api --docker
+RUN turbo prune server --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
@@ -20,8 +20,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # First install dependencies (as they change less often)
+RUN npm install -g pnpm
 COPY --from=builder /app/out/json/ .
-RUN yarn install
+RUN pnpm install --frozen-lockfile
 
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
@@ -33,15 +34,15 @@ COPY --from=builder /app/out/full/ .
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN yarn turbo build
+RUN pnpm turbo build
 
 FROM base AS runner
 WORKDIR /app
 
 # Don't run production as root
-RUN addgroup --system --gid 1001 expressjs
-RUN adduser --system --uid 1001 expressjs
-USER expressjs
+RUN addgroup --system --gid 1001 nestjs
+RUN adduser --system --uid 1001 nestjs
+USER nestjs
 COPY --from=installer /app .
 
-CMD node apps/api/dist/index.js
+CMD node apps/server/dist/main.js
